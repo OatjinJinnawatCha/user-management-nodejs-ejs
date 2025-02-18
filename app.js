@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
+const flash = require('connect-flash');
+const session = require('express-session');
 const connectDB = require('./server/config/db');
 
 const app = express();
@@ -10,11 +12,24 @@ const port = process.env.PORT || 3000;
 //Connect to MongoDB
 connectDB();
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Static Files
 app.use(express.static('public'));
+
+//Session Setup
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 //1 week
+    }
+}));
+
+//Flash Message
+app.use(flash({ sessionKeyName: 'flashMessage' }));
 
 //Template Engine
 app.use(expressLayout);
