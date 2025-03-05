@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1>Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md -">
+    <div class="btn-toolbar mb-2 mb-md 0">
         <div class="btn-group me-2">
             <a href="/add" class="btn btn-sm btn-outline-secondary">Add User</a>
         </div>
@@ -51,8 +51,7 @@
                             <a href="/edit/<%= element._id %>" type="button" class="btn btn-warning btn-small">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <form action="/edit/<%= element._id %>?_method=DELETE" method="POST" class=""
-                                position-relative">
+                            <form action="/edit/<%= element._id %>?_method=DELETE" method="POST" class="position-relative">
                                 <button type="submit" class="btn btn-danger btn-small">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -70,11 +69,32 @@
     <nav aria-label="Dashboard Pagination">
         <ul class="pagination justify-content-center mt-3">
             <% if (current == 1) { %>
-                <li class="page-item disabled"><a href="/?page=1" class="page-link">1</a></li>
+                <li class="page-item disabled"><a href="#" class="page-link">First</a></li>
             <% } else { %>
-                <li class="page-item"><a href="/?page=1" class="page-link">1</a></li>
+                <li class="page-item"><a href="/?page=1" class="page-link">First</a></li>
             <% } %>
 
+            <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+            <% if(i !== 1) { %>
+                <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
+            <% } %>
+
+            <% for(; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                <% if ( i == current) { %>
+                    <li class="page-item disabled"><a href="#" class="page-link"><%= i %></a></li>
+                <% } else { %>
+                    <li class="page-item"><a href="/?page=<%= i %>" class="page-link"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(current) + 4 && i < pages) { %>
+                    <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
+                <% } %>
+            <% } %>
+
+            <% if (current == pages) { %>
+                <li class="page-item disabled"><a href="#" class="page-link">Last</a></li>
+            <% } else { %>
+                <li class="page-item"><a href="/?page=<%= pages %>" class="page-link">Last</a></li> 
+            <% } %>
         </ul>
     </nav>
 <% } %>
